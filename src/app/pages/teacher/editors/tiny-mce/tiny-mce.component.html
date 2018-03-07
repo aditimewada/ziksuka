@@ -1,0 +1,146 @@
+<div class="row">
+<div class="col-lg-6"  (click)="getContent()">
+<nb-card>
+      <nb-card-header>Start Test</nb-card-header>
+      <nb-card-body>
+        <div class="form-group">
+          <label>Select Subject</label>
+          <select class="form-control" [(ngModel)]="selectedSubject" required>
+            <option *ngFor="let subject of getSubject" [ngValue]="subject">{{subject.sub_name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Select Book</label>
+          <select class="form-control" [(ngModel)]="selectedBook" required>
+            <option *ngFor="let book of getBook" [ngValue]="book">{{book.book_name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Select Chapter</label>
+          <select class="form-control" [(ngModel)]="selectedChapter" required>
+            <option *ngFor="let chp of getChapter" [ngValue]="chp">{{chp.chapter_name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Select Topic</label>
+          <select class="form-control" [(ngModel)]="selectedTopic" required>
+            <option *ngFor="let topic of getTopic" [ngValue]="topic">{{topic.topic_name}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Select SubTopic</label>
+          <select class="form-control" [(ngModel)]="selectedSubTopic" required>
+            <option *ngFor="let subtopic of getSubTopic" [ngValue]="subtopic">{{subtopic.subtopic_name}}</option>
+          </select>
+        </div>
+      </nb-card-body>
+    </nb-card>
+    <button type="submit" class="btn btn-primary" (click)="getQuestions()">Get Questions</button>
+    <button type="submit" class="btn btn-primary" (click)="addQuestion()">Add Questions</button>
+  </div>
+
+<div class="col-lg-6" *ngIf="mode=='add'">
+  <input type="file" placeholder="Upload file" (change)="fileChange($event)" accept=".jpg,.png">
+        <nb-card>
+      <nb-card-header>
+        QUESTION:
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-tiny-mce [elementId]="'question'" (keyup)="add()"></ngx-tiny-mce>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>
+        Option1:
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-tiny-mce [elementId]="'10'" (keyup)="add()"></ngx-tiny-mce>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>
+        Option2:
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-tiny-mce [elementId]="'20'" (keyup)="add()"></ngx-tiny-mce>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>
+        Option3:
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-tiny-mce [elementId]="'30'" (keyup)="add()"></ngx-tiny-mce>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>
+        Option4:
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-tiny-mce [elementId]="'40'" (keyup)="add()"></ngx-tiny-mce>
+      </nb-card-body>
+    </nb-card>
+    <!--<nb-card>
+      <nb-card-header>
+        ADD OPTIONS:
+      </nb-card-header>
+      <nb-card-body>
+        <ngx-tiny-mce [elementId]="'10'"  ></ngx-tiny-mce>
+        <ngx-tiny-mce [elementId]="'20'"  ></ngx-tiny-mce>
+        <ngx-tiny-mce [elementId]="'30'"></ngx-tiny-mce>
+        <!--<ngx-tiny-mce [elementId]="'40'" ></ngx-tiny-mce>-->
+         <!--</nb-card-body>
+    </nb-card>-->
+     <div class="form-group">
+          <label>Difficulty</label>
+           <input type="text" [(ngModel)]="diff" [ngModelOptions]='{standalone: true}' />
+        </div>
+    <nb-card>
+      <nb-card-header>
+        CORRECT OPTION:
+      </nb-card-header>
+      <nb-card-body>
+        <div class="form-group">
+           <input type="text" [(ngModel)]="ans" [ngModelOptions]='{standalone: true}' #abc/>
+        </div>
+        </nb-card-body>
+    </nb-card>
+    <nb-card>
+    <nb-card-body>
+        <button
+          class="btn btn-primary"
+          (click)="add(this.chp, this.subject, this.book, this.topic, this.subTopic, this.class1, this.diff, this.ans)">
+          Add
+        </button>
+      </nb-card-body>
+    </nb-card>
+     <nb-card>
+    <nb-card-body>
+        <button
+          class="btn btn-primary"
+          (click)="update(this.chp, this.subject, this.book, this.topic, this.subTopic, this.class1, this.diff, this.ans)">
+          Update
+        </button>
+      </nb-card-body>
+    </nb-card>
+</div>
+<div class="col-lg-6" *ngIf="mode=='result'">
+<div class="result" >
+    <h2>Qestions:</h2>
+    <div *ngFor="let question of QuestionList; let index = index">
+      <div class="result-question">
+        <h4>{{index + 1}}.<span [innerHTML]="question.question"></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <button type="submit" class="btn btn-primary" (click)="edit(question)">Edit</button></h4>  
+        <div class="row">
+          <div class="col-md-6" *ngFor="let Option of question.options">
+            <input id="{{Option.id}}" type="checkbox" disabled="disabled" [(ngModel)]="Option.isAnswer" /> {{Option.option_text}}
+          </div>       
+        </div>
+        <!--<div class="alert {{ isCorrect(question) == 'correct'? 'alert-success': 'alert-danger'}}">Your answer is {{isCorrect(question)}}.</div>
+      </div>-->
+    </div>
+    <!--<h4 class="alert alert-info text-sm-center">You may close this window now.</h4>-->
+  </div>
+</div>
+</div>
+</div>
